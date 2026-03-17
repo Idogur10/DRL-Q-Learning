@@ -1,9 +1,4 @@
-# Deep Reinforcement Learning - Assignment #1
-
-**Ben-Gurion University of the Negev**
-Faculty of Engineering Sciences | Department of Software and Information Systems
-
-**Authors:** Oz Elbaz (204388763) & Ido Gurevich (205478068)
+# Deep Reinforcement Learning: Q-Learning
 
 ---
 
@@ -37,6 +32,11 @@ This project implements and compares three reinforcement learning algorithms:
 
 A Q-Learning agent was implemented for the **FrozenLake-v1** environment (4x4 grid, slippery). A lookup table of Q-values for each state-action pair (16 states x 4 actions = 64 entries) was initialized to zero.
 
+<p align="center">
+  <img src="images/fig3_frozen_lake_env.png" alt="Frozen Lake Environment" width="200"/>
+  <br><em>Figure 3: The FrozenLake 4x4 environment</em>
+</p>
+
 **Best hyperparameters found:**
 
 | Parameter | Value |
@@ -46,6 +46,22 @@ A Q-Learning agent was implemented for the **FrozenLake-v1** environment (4x4 gr
 | Discount Factor | 0.99 |
 | Initial Epsilon | 0.8 |
 | Final Epsilon | 0.01 |
+
+Hyperparameter tuning was performed by testing multiple combinations. The figure below shows an example of tuning over the learning rate:
+
+<p align="center">
+  <img src="images/fig1_hyperparameter_tuning.png" alt="Hyperparameter Tuning" width="700"/>
+  <br><em>Figure 1: Hyperparameter tuning for the Q-Learning agent</em>
+</p>
+
+The Q-value lookup table was tracked at different stages of training (500, 2500, and 5000 episodes):
+
+<p align="center">
+  <img src="images/fig2_qvalue_table_500.png" alt="Q-values at 500 episodes" width="300"/>
+  <img src="images/fig2_qvalue_table_2500.png" alt="Q-values at 2500 episodes" width="300"/>
+  <img src="images/fig2_qvalue_table_5000.png" alt="Q-values at 5000 episodes" width="300"/>
+  <br><em>Figure 2: Q-value lookup table at 500, 2500, and 5000 episodes</em>
+</p>
 
 **Key observations:**
 - After 500 steps, most Q-values remained at 0 due to the low probability of reaching the goal state by chance
@@ -90,6 +106,11 @@ A Q-Learning agent was implemented for the **FrozenLake-v1** environment (4x4 gr
 - On average, ~350 episodes were needed to reach the reward threshold
 - The loss curve shows initial decrease followed by periodic spikes when the target network is updated
 
+<p align="center">
+  <img src="images/fig4_dqn_3layer_results.png" alt="DQN 3-Layer Results" width="700"/>
+  <br><em>Figure 4: Results for the DQN agent with 3 hidden layers — reward per episode (left) and loss per step (right)</em>
+</p>
+
 ### DQN Agent - 5 Hidden Layers
 
 **Architecture:** Input(4) -> 64 -> 64 -> 32 -> 32 -> 16 -> Output(2)
@@ -100,6 +121,11 @@ Same hyperparameters as the 3-layer network.
 - The extended network did not provide significant improvement and performed worse than the simpler network
 - The additional layers likely introduced noise during optimization or caused overfitting
 - The 3-layer network is sufficient to approximate the Q-function for this relatively simple problem
+
+<p align="center">
+  <img src="images/fig5_dqn_5layer_results.png" alt="DQN 5-Layer Results" width="700"/>
+  <br><em>Figure 5: Results for the DQN agent with 5 hidden layers</em>
+</p>
 
 ---
 
@@ -117,6 +143,11 @@ The same 3-hidden-layer architecture was used for fair comparison with the stand
 - The average loss per step was much more stable with lower values compared to the standard DQN
 - Same network architecture and hyperparameters were used, strongly indicating an algorithmic improvement
 
+<p align="center">
+  <img src="images/fig6_double_dqn_results.png" alt="Double DQN Results" width="700"/>
+  <br><em>Figure 6: Results for the Double DQN — reward per episode (left) and loss per step (right)</em>
+</p>
+
 ---
 
 ## Project Structure
@@ -126,6 +157,7 @@ The same 3-hidden-layer architecture was used for fair comparison with the stand
 ├── Qlearning.py          # Tabular Q-Learning agent for FrozenLake-v1
 ├── DQN.py                # DQN agent (3-layer and 5-layer) for CartPole-v1
 ├── DoubleDQN.py          # Double DQN agent for CartPole-v1
+├── images/               # Figures from the report
 ├── Assignment1_Report.pdf # Full assignment report
 ├── requirements.txt      # Python dependencies
 └── README.md             # This file
