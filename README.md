@@ -156,7 +156,6 @@ The same 3-hidden-layer architecture was used for fair comparison with the stand
 ├── DQN.py                # DQN agent (3-layer and 5-layer) for CartPole-v1
 ├── DoubleDQN.py          # Double DQN agent for CartPole-v1
 ├── images/               # Figures from the report
-├── Assignment1_Report.pdf # Full assignment report
 ├── requirements.txt      # Python dependencies
 └── README.md             # This file
 ```
