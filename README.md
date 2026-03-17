@@ -14,19 +14,17 @@ This project implements and compares three reinforcement learning algorithms:
 
 ## Section 1 - Tabular Q-Learning
 
-### Theoretical Questions
+### Background
 
-- **Q1 - Why can't Value Iteration be used for environments with unknown dynamics?**
-  Value Iteration is a model-based method that requires full knowledge of the environment's dynamics to determine the optimal solution. It also assumes a finite set of states and actions. For environments with unknown or complicated dynamics, these assumptions do not hold, making Value Iteration inapplicable.
+Classical approaches like **Value Iteration** require a complete model of the environment — full knowledge of transition probabilities and rewards for every state-action pair. This makes them impractical for real-world problems where the dynamics are unknown or too complex to model explicitly.
 
-- **Q2 - What are model-free methods?**
-  Model-free methods do not require knowledge of the environment's dynamics. Instead, they learn directly from interacting with the environment through trial and error to estimate the value of states or state-action pairs.
+**Model-free methods** address this limitation by learning directly from experience. Rather than relying on a predefined model, the agent interacts with the environment through trial and error, gradually estimating the value of states or state-action pairs from the rewards it observes.
 
-- **Q3 - SARSA vs. Q-Learning**
-  SARSA is an on-policy method that updates the Q-value based on the actual action taken in the next state following the current policy. Q-Learning is an off-policy method that updates the Q-value using the maximum possible future reward, assuming optimal actions. Q-Learning often converges faster but may disregard exploratory actions, unlike SARSA.
+Two prominent model-free algorithms are **SARSA** and **Q-Learning**. Both estimate Q-values, but they differ in a key way:
+- **SARSA** (on-policy) updates its Q-values based on the action the agent *actually takes* in the next state, reflecting the agent's real behavior including exploration
+- **Q-Learning** (off-policy) updates based on the *best possible* action in the next state, regardless of what the agent actually does — this often leads to faster convergence, but can overlook the cost of exploratory actions
 
-- **Q4 - Why use a decaying epsilon-greedy strategy instead of acting greedily?**
-  Acting greedily prioritizes short-term rewards but risks getting stuck in suboptimal routines. A decaying epsilon-greedy strategy balances exploration and exploitation by encouraging more exploration early in learning and gradually shifting towards greedy actions as the agent gains confidence.
+A critical design choice is how the agent balances **exploration vs. exploitation**. A purely greedy agent always picks the action with the highest known Q-value, which risks getting trapped in suboptimal behavior. A **decaying epsilon-greedy** strategy solves this by starting with high exploration (random actions) and gradually shifting toward exploitation as the agent builds confidence in its learned values.
 
 ### Implementation
 
@@ -73,13 +71,13 @@ The Q-value lookup table was tracked at different stages of training (500, 2500,
 
 ## Section 2 - Deep Q-Network (DQN)
 
-### Theoretical Questions
+### Background
 
-- **Q1 - Why sample experiences in random order?**
-  Random sampling from the experience replay buffer breaks the correlation between consecutive state-action pairs. This reduces variance caused by such correlations, leading to more stable and effective training.
+When the state space becomes too large for a lookup table, we turn to **Deep Q-Networks** — neural networks that approximate the Q-function. However, training a neural network on RL data introduces two key challenges that require special techniques:
 
-- **Q2 - Why use an older set of weights (target network) to compute targets?**
-  Using an older set of weights stabilizes training by preventing target values from changing too rapidly, which can cause instability and divergence. Updating the target network every C steps provides a consistent reference for computing the loss, allowing the model to converge more reliably.
+- **Experience Replay** — In supervised learning, training samples are typically independent. In RL, consecutive experiences are highly correlated (the next state depends on the current action). Storing transitions in a replay buffer and sampling them randomly breaks these temporal correlations, reducing variance and leading to much more stable training.
+
+- **Target Networks** — When the same network is used to both select actions and compute target values, the targets shift with every weight update, creating a "moving target" problem that can cause instability or divergence. The solution is to maintain a separate **target network** with older, frozen weights that is updated only every C steps. This provides a stable reference for computing the loss, allowing the policy network to converge more reliably.
 
 ### DQN Agent - 3 Hidden Layers
 
